@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <style>
+        /* Estilos para el fondo de la pantalla */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('images/fondo.jpg'); /* Cambia 'images/fondo.jpg' por la ruta de tu imagen */
+            background-size: cover; /* Ajusta la imagen para cubrir toda la pantalla */
+            background-position: center; /* Centra la imagen */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            background-attachment: fixed; /* Fija la imagen para que no se desplace con el scroll */
+        }
+
+        /* Resto de tus estilos... */
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Videojuegos Interactivos</title>
+    <style>
+        /* Estilos para el fondo de la pantalla */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('ruta/a/tu/imagen.jpg'); /* Cambia esto por la ruta de tu imagen */
+            background-size: cover; /* Ajusta la imagen para cubrir toda la pantalla */
+            background-position: center; /* Centra la imagen */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            background-attachment: fixed; /* Fija la imagen para que no se desplace con el scroll */
+        }
+
+        header {
+            background-color: rgba(51, 51, 51, 0.8); /* Fondo semitransparente */
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        nav button {
+            background-color: rgba(51, 51, 51, 0.8); /* Fondo semitransparente */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        nav button:hover {
+            background-color: rgba(85, 85, 85, 0.8); /* Fondo semitransparente al pasar el ratón */
+        }
+
+        .game {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.9); /* Fondo semitransparente */
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .game h2 {
+            margin-top: 0;
+        }
+
+        canvas {
+            background-color: rgba(238, 238, 238, 0.9); /* Fondo semitransparente */
+            border: 1px solid #ccc;
+            display: block;
+            margin: 10px auto;
+        }
+
+        .controls {
+            margin-top: 10px;
+        }
+
+        .controls button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Página de Videojuegos Interactivos</h1>
+    </header>
+    <nav>
+        <button onclick="showGame('game2')">Laberinto</button>
+        <button onclick="showGame('game3')">Pong</button>
+        <button onclick="showGame('game4')">Space Shooter</button>
+        <button onclick="showGame('game6')">Tetris</button>
+    </nav>
+
+    <!-- Juego 2: Laberinto -->
+    <div class="game" id="game2">
+        <h2>Laberinto</h2>
+        <canvas id="canvas2" width="400" height="300"></canvas>
+        <div class="controls">
+            <button onclick="startGame2()">Iniciar</button>
+        </div>
+    </div>
+
+    <!-- Juego 3: Pong -->
+    <div class="game" id="game3">
+        <h2>Pong</h2>
+        <canvas id="canvas3" width="400" height="300"></canvas>
+        <div class="controls">
+            <button onclick="startGame3()">Iniciar</button>
+        </div>
+    </div>
+
+    <!-- Juego 4: Space Shooter -->
+    <div class="game" id="game4">
+        <h2>Space Shooter</h2>
+        <canvas id="canvas4" width="400" height="300"></canvas>
+        <div class="controls">
+            <button onclick="startGame4()">Iniciar</button>
+        </div>
+    </div>
+
+    <!-- Juego 6: Tetris -->
+    <div class="game" id="game6">
+        <h2>Tetris</h2>
+        <canvas id="canvas6" width="400" height="600"></canvas>
+        <div class="controls">
+            <button onclick="startGame6()">Iniciar</button>
+        </div>
+    </div>
+
+    <script>
+        // Función para mostrar el juego seleccionado
+        function showGame(gameId) {
+            const games = document.querySelectorAll('.game');
+            games.forEach(game => game.style.display = 'none');
+            document.getElementById(gameId).style.display = 'block';
+        }
+
+        // Variables globales para controlar los intervalos de los juegos
+        let gameInterval;
+
+        // Función para detener el juego anterior
+        function stopGame() {
+            if (gameInterval) {
+                clearInterval(gameInterval);
+                gameInterval = null;
+            }
+        }
+
+        // Juego 2: Laberinto
+        function startGame2() {
+            stopGame(); // Detener el juego anterior
+            const canvas = document.getElementById('canvas2');
+            const ctx = canvas.getContext('2d');
+
+            // Definir 10 niveles de laberintos
+            const levels = [
+                [
+                    [1, 1, 1, 1, 1],
+                    [1, 0, 0, 0, 1],
+                    [1, 1, 1, 0, 1],
+                    [1, 0, 0, 0, 1],
+                    [1, 1, 1, 1, 1],
+                ],
+                [
+                    [1, 1, 1, 1, 1, 1],
+                    [1, 0, 0, 0, 0, 1],
+                    [1, 0, 1, 1, 0, 1],
+                    [1, 0, 1, 0, 0, 1],
+                    [1, 0, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1],
+                ],
+                // Añade más niveles aquí...
+            ];
+
+            let currentLevel = 0;
+            let maze = levels[currentLevel];
+            const cellSize = 50; // Tamaño de cada celda del laberinto
+            let player = { x: 1, y: 1 }; // Posición inicial del jugador
+            let exit = { x: maze[0].length - 2, y: maze.length - 2 }; // Posición de la salida
+
+            function drawMaze() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let y = 0; y < maze.length; y++) {
+                    for (let x = 0; x < maze[y].length; x++) {
+                        if (maze[y][x] === 1) {
+                            ctx.fillStyle = '#000';
+                            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+                        }
+                    }
+                }
+                // Dibujar al jugador
+                ctx.fillStyle = '#00F';
+                ctx.fillRect(player.x * cellSize, player.y * cellSize, cellSize, cellSize);
+                // Dibujar la salida
+                ctx.fillStyle = '#0F0';
+                ctx.fillRect(exit.x * cellSize, exit.y * cellSize, cellSize, cellSize);
+            }
+
+            // Mover al jugador con las teclas de flecha
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowUp' && maze[player.y - 1][player.x] === 0) player.y--;
+                if (e.key === 'ArrowDown' && maze[player.y + 1][player.x] === 0) player.y++;
+                if (e.key === 'ArrowLeft' && maze[player.y][player.x - 1] === 0) player.x--;
+                if (e.key === 'ArrowRight' && maze[player.y][player.x + 1] === 0) player.x++;
+                drawMaze();
+
+                // Verificar si el jugador llegó a la salida
+                if (player.x === exit.x && player.y === exit.y) {
+                    currentLevel++;
+                    if (currentLevel < levels.length) {
+                        maze = levels[currentLevel];
+                        player = { x: 1, y: 1 };
+                        exit = { x: maze[0].length - 2, y: maze.length - 2 };
+                        drawMaze();
+                    } else {
+                        alert("¡Has completado todos los niveles!");
+                    }
+                }
+            });
+
+            drawMaze();
+        }
+
+        // Juego 3: Pong
+        function startGame3() {
+            stopGame(); // Detener el juego anterior
+            const canvas = document.getElementById('canvas3');
+            const ctx = canvas.getContext('2d');
+
+            let paddleWidth = 80;
+            let paddleHeight = 10;
+            let paddleX = (canvas.width - paddleWidth) / 2;
+            let ballX = canvas.width / 2;
+            let ballY = canvas.height / 2;
+            let ballDX = 2;
+            let ballDY = 2;
+            let ballRadius = 10;
+
+            function drawPaddle() {
+                ctx.fillStyle = '#0095DD';
+                ctx.fillRect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+            }
+
+            function drawBall() {
+                ctx.beginPath();
+                ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+                ctx.fillStyle = '#FF0000';
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawPaddle();
+                drawBall();
+
+                // Mover la pelota
+                ballX += ballDX;
+                ballY += ballDY;
+
+                // Rebotar en los bordes
+                if (ballX + ballRadius > canvas.width || ballX - ballRadius < 0) {
+                    ballDX = -ballDX;
+                }
+                if (ballY - ballRadius < 0) {
+                    ballDY = -ballDY;
+                }
+
+                // Rebotar en la paleta
+                if (
+                    ballY + ballRadius > canvas.height - paddleHeight &&
+                    ballX > paddleX &&
+                    ballX < paddleX + paddleWidth
+                ) {
+                    ballDY = -ballDY;
+                }
+
+                // Si la pelota toca el fondo, reiniciar
+                if (ballY + ballRadius > canvas.height) {
+                    ballX = canvas.width / 2;
+                    ballY = canvas.height / 2;
+                }
+            }
+
+            // Mover la paleta con el ratón
+            canvas.addEventListener('mousemove', (e) => {
+                paddleX = e.clientX - canvas.offsetLeft - paddleWidth / 2;
+            });
+
+            gameInterval = setInterval(draw, 10);
+        }
+
+        // Juego 4: Space Shooter
+        function startGame4() {
+            stopGame(); // Detener el juego anterior
+            const canvas = document.getElementById('canvas4');
+            const ctx = canvas.getContext('2d');
+
+            let playerX = canvas.width / 2 - 25;
+            let playerY = canvas.height - 50;
+            let bullets = [];
+            let enemies = [];
+            let enemySpeed = 1;
+
+            function drawPlayer() {
+                ctx.fillStyle = '#00F';
+                ctx.fillRect(playerX, playerY, 50, 50);
+            }
+
+            function drawBullets() {
+                ctx.fillStyle = '#FF0';
+                bullets.forEach((bullet) => {
+                    ctx.fillRect(bullet.x, bullet.y, 5, 10);
+                    bullet.y -= 5; // Mover la bala hacia arriba
+                });
+            }
+
+            function drawEnemies() {
+                ctx.fillStyle = '#F00';
+                enemies.forEach((enemy) => {
+                    ctx.fillRect(enemy.x, enemy.y, 30, 30);
+                    enemy.y += enemySpeed; // Mover el enemigo hacia abajo
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawPlayer();
+                drawBullets();
+                drawEnemies();
+
+                // Generar enemigos aleatorios
+                if (Math.random() < 0.02) {
+                    enemies.push({ x: Math.random() * (canvas.width - 30), y: 0 });
+                }
+
+                // Eliminar balas y enemigos que salen de la pantalla
+                bullets = bullets.filter((bullet) => bullet.y > 0);
+                enemies = enemies.filter((enemy) => enemy.y < canvas.height);
+            }
+
+            // Mover al jugador con las teclas de flecha
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft' && playerX > 0) playerX -= 10;
+                if (e.key === 'ArrowRight' && playerX < canvas.width - 50) playerX += 10;
+                if (e.key === ' ') { // Disparar con la barra espaciadora
+                    bullets.push({ x: playerX + 22.5, y: playerY });
+                }
+            });
+
+            gameInterval = setInterval(draw, 10);
+        }
+
+        // Juego 6: Tetris
+        function startGame6() {
+            stopGame(); // Detener el juego anterior
+            const canvas = document.getElementById('canvas6');
+            const ctx = canvas.getContext('2d');
+
+            const grid = Array(20).fill().map(() => Array(10).fill(0));
+            const tetrominoes = [
+                [[1, 1, 1, 1]], // I
+                [[1, 1], [1, 1]], // O
+                [[1, 1, 1], [0, 1, 0]], // T
+                [[1, 1, 0], [0, 1, 1]], // S
+                [[0, 1, 1], [1, 1, 0]], // Z
+                [[1, 1, 1], [1, 0, 0]], // L
+                [[1, 1, 1], [0, 0, 1]], // J
+            ];
+
+            let currentPiece = tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
+            let pieceX = 3;
+            let pieceY = 0;
+
+            function drawGrid() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let y = 0; y < grid.length; y++) {
+                    for (let x = 0; x < grid[y].length; x++) {
+                        if (grid[y][x]) {
+                            ctx.fillStyle = '#00F';
+                            ctx.fillRect(x * 20, y * 20, 20, 20);
+                        }
+                    }
+                }
+                // Dibujar la pieza actual
+                ctx.fillStyle = '#F00';
+                for (let y = 0; y < currentPiece.length; y++) {
+                    for (let x = 0; x < currentPiece[y].length; x++) {
+                        if (currentPiece[y][x]) {
+                            ctx.fillRect((pieceX + x) * 20, (pieceY + y) * 20, 20, 20);
+                        }
+                    }
+                }
+            }
+
+            function movePiece() {
+                pieceY++;
+                if (pieceY + currentPiece.length > 20) {
+                    pieceY--;
+                    placePiece();
+                }
+                drawGrid();
+            }
+
+            function placePiece() {
+                for (let y = 0; y < currentPiece.length; y++) {
+                    for (let x = 0; x < currentPiece[y].length; x++) {
+                        if (currentPiece[y][x]) {
+                            grid[pieceY + y][pieceX + x] = 1;
+                        }
+                    }
+                }
+                currentPiece = tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
+                pieceX = 3;
+                pieceY = 0;
+            }
+
+            gameInterval = setInterval(movePiece, 500);
+        }
+    </script>
+</body>
+</html>
